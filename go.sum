@@ -1,0 +1,4 @@
+github.com/gorilla/websocket v1.4.2 h1:+/TMaTYc4QFitKJxsQ7Yye35DkWvkdLcvGKqM+x0Ufc=
+github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
+github.com/osm/flen v1.0.0 h1:sicNUteUA8L/mRL1mw470YZ1nxX6TjZ1R37c5/hSqb8=
+github.com/osm/flen v1.0.0/go.mod h1:iEnnCNqUz0Nr10JEm7rXvGV/Afd/U6CLvblpFtUjbPw=
