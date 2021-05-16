@@ -183,7 +183,7 @@ func die(message string) {
 func main() {
 	email := flag.String("email", "", "irccloud email")
 	password := flag.String("password", "", "irccloud password")
-	flen.SetEnvPrefix("IRCCLOUD")
+	flen.SetEnvPrefix("ICKA")
 	flen.Parse()
 
 	if *email == "" {
