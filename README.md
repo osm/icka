@@ -7,5 +7,5 @@ irccloud keep-alive
 ```sh
 $ make
 $ make install
-$ icka <email> <password>
+$ icka -email <email> -password <password>
 ```
