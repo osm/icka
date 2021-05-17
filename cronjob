@@ -1,0 +1,43 @@
+#!/bin/bash
+
+##########
+# Instructions
+##########
+# Edit the script with your account data
+##
+# Make this file executable with:
+#   chmod +x "$HOME"/icka/cronjob
+##
+# Add the following to your crontab:
+#   0 * * * * /usr/bin/bash "$HOME"/icka/cronjob >/dev/null 2>&1
+# (this will execute this script every hour)
+##
+# Enjoy!
+##########
+
+##########
+# IRCCloud account email
+##########
+theEmail=foo@example.com
+
+##########
+# IRCCloud account password
+##########
+thePassword=pass1234
+
+##########
+# File location to write success/failure messages?
+# Only one success/failure message will be kept every time this script is executed
+##########
+theFile="$HOME"/irccloud
+
+##########
+# Don't edit anything below unless you know exactly what you're doing.
+# If you touch the code below and then complain the script "suddenly stopped working" I'll touch you at night.
+##########
+ICKA_EMAIL="$theEmail" ICKA_PASSWORD="$thePassword" "$HOME"/go/bin/icka
+if [ $? -eq 0 ]; then
+	echo "IRCCloud session kept alive at $(date)" > "$theFile"
+else
+	echo "IRCCloud session couldn't be kept alive at $(date)" > "$theFile"
+fi
