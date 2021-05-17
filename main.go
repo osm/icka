@@ -5,10 +5,12 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/osm/flen"
@@ -175,37 +177,25 @@ func authWebsocket(session, host, path string) (bool, error) {
 	return r.Success, nil
 }
 
-func die(message string) {
-	fmt.Fprintf(os.Stderr, message+"\n")
-	os.Exit(1)
-}
-
-func main() {
-	email := flag.String("email", "", "irccloud email")
-	password := flag.String("password", "", "irccloud password")
-	flen.SetEnvPrefix("ICKA")
-	flen.Parse()
-
-	if *email == "" {
-		die("-email is required")
-	}
-
-	if *password == "" {
-		die("-password is required")
-	}
-
+func keepAlive(email, password string) error {
 	token, err := getAuthToken()
-	if err != nil || !token.Success {
-		die("get auth token failed")
+	if err != nil {
+		return err
+	}
+	if !token.Success {
+		return fmt.Errorf("get auth token failed")
 	}
 
 	session, err := getSession(
-		*email,
-		*password,
+		email,
+		password,
 		token.Token,
 	)
-	if err != nil || !session.Success {
-		die("get session failed")
+	if err != nil {
+		return err
+	}
+	if !session.Success {
+		return fmt.Errorf("get session failed, check email and password")
 	}
 
 	success, err := authWebsocket(
@@ -214,10 +204,50 @@ func main() {
 		session.WebsocketPath+"?exclude_archives=1",
 	)
 	if err != nil {
-		die("auth websocket request failed")
+		return err
+	}
+	if !success {
+		return fmt.Errorf("auth websocket request failed")
 	}
 
-	if !success {
-		die("auth websocket failed")
+	return nil
+}
+
+func die(message string) {
+	fmt.Fprintf(os.Stderr, message+"\n")
+	os.Exit(1)
+}
+
+func main() {
+	email := flag.String("email", "", "irccloud email")
+	password := flag.String("password", "", "irccloud password")
+	forever := flag.Bool("forever", false, "run forever, will sleep for one hour after each iteration")
+	flen.SetEnvPrefix("ICKA")
+	flen.Parse()
+
+	if *email == "" {
+		die("-email is required")
+	}
+	if *password == "" {
+		die("-password is required")
+	}
+
+	if !*forever {
+		err := keepAlive(*email, *password)
+		if err != nil {
+			die(err.Error())
+		}
+		return
+	}
+
+	for {
+		err := keepAlive(*email, *password)
+		if err != nil {
+			log.Printf("keep alive error: %v", err)
+		} else {
+			log.Printf("successfully kept connection alive")
+		}
+
+		time.Sleep(time.Hour * 1)
 	}
 }
