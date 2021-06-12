@@ -1,6 +1,12 @@
 #!/bin/bash
 
 ##########
+# IMPORTANT NOTE
+# This was tested on Ubuntu 20.04 and bash shell
+# For other OSes/shells, please adapt the script to match your environment
+##########
+
+##########
 # Instructions
 ##########
 # Edit the script with your account data
@@ -18,28 +24,33 @@
 ##########
 # IRCCloud account email
 ##########
-theEmail=foo@example.com
+theEmail="foo@example.com"
 
 ##########
 # IRCCloud account password
 ##########
-thePassword=pass1234
+thePassword="pass1234"
 
 ##########
-# File location to write success/failure messages?
-# Only one success/failure message will be kept every time this script is executed
+# File location to write the success/failure messagee?
+# Only one success/failure message will be kept every time this script is executed,
+# so you do not need to worry about disk space ;D
 ##########
 theFile="$HOME/$theEmail"
 
 ##########
+# Binary location (including the binary/executable name)
+# By default `$HOME/go/bin/icka'
+##########
+theBinary="$HOME/go/bin/icka"
+
+##########
+# WARNING! HALT! STOP RIGHT THERE!
 # Don't edit anything below unless you know exactly what you're doing.
 # If you touch the code below and then complain the script "suddenly stopped working" I'll touch you at night.
 ##########
-ICKA_EMAIL="$theEmail" ICKA_PASSWORD="$thePassword" "$HOME"/go/bin/icka
+ICKA_EMAIL="$theEmail" ICKA_PASSWORD="$thePassword" "$theBinary"
 
-##########
-# This will output the failure/success messages into a txt file with the same name as your email address
-##########
 if [ $? -eq 0 ]; then
 	echo "$(date) - IRCCloud session kept alive." > "$theFile"
 else
