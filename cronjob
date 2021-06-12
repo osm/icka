@@ -29,15 +29,19 @@ thePassword=pass1234
 # File location to write success/failure messages?
 # Only one success/failure message will be kept every time this script is executed
 ##########
-theFile="$HOME"/irccloud
+theFile="$HOME/$theEmail"
 
 ##########
 # Don't edit anything below unless you know exactly what you're doing.
 # If you touch the code below and then complain the script "suddenly stopped working" I'll touch you at night.
 ##########
 ICKA_EMAIL="$theEmail" ICKA_PASSWORD="$thePassword" "$HOME"/go/bin/icka
+
+##########
+# This will output the failure/success messages into a txt file with the same name as your email address
+##########
 if [ $? -eq 0 ]; then
-	echo "IRCCloud session kept alive at $(date)" > "$theFile"
+	echo "$(date) - IRCCloud session kept alive." > "$theFile"
 else
-	echo "IRCCloud session couldn't be kept alive at $(date)" > "$theFile"
+	echo "$(date) - IRCCloud session couldn't be kept alive!" > "$theFile"
 fi
