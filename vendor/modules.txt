@@ -1,0 +1,6 @@
+# github.com/gorilla/websocket v1.4.2
+## explicit
+github.com/gorilla/websocket
+# github.com/osm/flen v1.0.0
+## explicit
+github.com/osm/flen
