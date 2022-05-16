@@ -95,7 +95,7 @@ func wsClient(host, path string) (*websocket.Conn, error) {
 func getAuthToken() (*AuthTokenResponse, error) {
 	resp, err := httpRequest(
 		"POST",
-		"https://www.irccloud.com/chat/auth-formtoken",
+		"https://api-3.irccloud.com/chat/auth-formtoken",
 		nil,
 		map[string]string{
 			"User-Agent": userAgent,
