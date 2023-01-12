@@ -222,6 +222,7 @@ func main() {
 	email := flag.String("email", "", "irccloud email")
 	password := flag.String("password", "", "irccloud password")
 	forever := flag.Bool("forever", false, "run forever, will sleep for one hour after each iteration")
+	sleepInterval := flag.String("sleep-interval", "1h", "sleep interval, used in -forever mode")
 	flen.SetEnvPrefix("ICKA")
 	flen.Parse()
 
@@ -240,6 +241,11 @@ func main() {
 		return
 	}
 
+	dur, err := time.ParseDuration(*sleepInterval)
+	if err != nil {
+		die(fmt.Sprintf("unable to parse -sleep-interval: %v", err.Error()))
+	}
+
 	for {
 		err := keepAlive(*email, *password)
 		if err != nil {
@@ -248,6 +254,6 @@ func main() {
 			log.Printf("successfully kept connection alive")
 		}
 
-		time.Sleep(time.Hour * 1)
+		time.Sleep(dur)
 	}
 }
