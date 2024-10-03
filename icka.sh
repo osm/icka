@@ -37,10 +37,10 @@ ickaPassword="foobar"
 #-------------------------#
 ickaBinary="/home/$user/go/bin/icka"
 
-#-----------------------------------------------------------------------------------#
-# Name of the file where we are going to write the successfailure message?          #
-# Only one success/failure message will be kept every time this script is executed. #
-#-----------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------#
+# Name of the file where we are going to write the success/failure message?          #
+# Only one success/failure message will be kept every time this script is executed.  #
+#------------------------------------------------------------------------------------#
 ickaLog="icka.log"
 
 ##----------------------##
