@@ -9,8 +9,7 @@
 # Make this file executable with:
 #   chmod +x /home/$user/icka.sh
 ##
-# Add the following to your crontab, to make it
-# run every hour, so you never disconnect:
+# Add the following to your crontab, to make it run every hour, so you never disconnect:
 #   0 * * * * /home/$user/icka.sh >/dev/null 2>&1
 ##
 # Enjoy!
