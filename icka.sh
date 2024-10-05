@@ -38,10 +38,10 @@ ickaPassword="foobar"
 ickaBinary="/home/$user/go/bin/icka"
 
 #------------------------------------------------------------------------------------#
-# Name of the file where we are going to write the success/failure message?          #
+# Path to the file where we are going to write the success/failure message?          #
 # Only one success/failure message will be kept every time this script is executed.  #
 #------------------------------------------------------------------------------------#
-ickaLog="icka.log"
+ickaLog="/home/$user/icka.log"
 
 ##----------------------##
 ## End of configuration ##
@@ -54,7 +54,7 @@ ickaLog="icka.log"
 "$ickaBinary" -email "$ickaEmail" -password "$ickaPassword"
 
 if [ $? -eq 0 ]; then
-	echo "$(date) - IRCCloud session kept alive." > "$HOME/$ickaLog"
+	echo "$(date) - IRCCloud session kept alive." > "$ickaLog"
 else
-	echo "$(date) - IRCCloud session couldn't be kept alive!" > "$HOME/$ickaLog"
+	echo "$(date) - IRCCloud session couldn't be kept alive!" > "$ickaLog"
 fi
