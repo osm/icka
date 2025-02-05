@@ -77,7 +77,7 @@ func httpRequest(method, url string, form *url.Values, headers map[string]string
 	return ret, nil
 }
 
-func wsClient(host, path string) (*websocket.Conn, error) {
+func wsClient(host, path, userAgent string) (*websocket.Conn, error) {
 	var hs http.Header = make(http.Header)
 	hs.Set("Host", host)
 	hs.Set("Origin", "https://www.irccloud.com")
@@ -92,7 +92,7 @@ func wsClient(host, path string) (*websocket.Conn, error) {
 	return client, nil
 }
 
-func getAuthToken() (*AuthTokenResponse, error) {
+func getAuthToken(userAgent string) (*AuthTokenResponse, error) {
 	resp, err := httpRequest(
 		"POST",
 		"https://api-3.irccloud.com/chat/auth-formtoken",
@@ -114,7 +114,7 @@ func getAuthToken() (*AuthTokenResponse, error) {
 	return &r, nil
 }
 
-func getSession(email, password, token string) (*SessionResponse, error) {
+func getSession(email, password, token, userAgent string) (*SessionResponse, error) {
 	form := url.Values{}
 	form.Add("email", email)
 	form.Add("password", password)
@@ -143,8 +143,8 @@ func getSession(email, password, token string) (*SessionResponse, error) {
 	return &r, nil
 }
 
-func authWebsocket(session, host, path string) (bool, error) {
-	client, err := wsClient(host, path)
+func authWebsocket(session, host, path, userAgent string) (bool, error) {
+	client, err := wsClient(host, path, userAgent)
 	if err != nil {
 		return false, err
 	}
@@ -177,8 +177,8 @@ func authWebsocket(session, host, path string) (bool, error) {
 	return r.Success, nil
 }
 
-func keepAlive(email, password string) error {
-	token, err := getAuthToken()
+func keepAlive(email, password, userAgent string) error {
+	token, err := getAuthToken(userAgent)
 	if err != nil {
 		return err
 	}
@@ -190,6 +190,7 @@ func keepAlive(email, password string) error {
 		email,
 		password,
 		token.Token,
+		userAgent,
 	)
 	if err != nil {
 		return err
@@ -202,6 +203,7 @@ func keepAlive(email, password string) error {
 		session.Session,
 		session.WebsocketHost,
 		session.WebsocketPath+"?exclude_archives=1",
+		userAgent,
 	)
 	if err != nil {
 		return err
@@ -223,6 +225,7 @@ func main() {
 	password := flag.String("password", "", "irccloud password")
 	forever := flag.Bool("forever", false, "run forever, will sleep for one hour after each iteration")
 	sleepInterval := flag.String("sleep-interval", "1h", "sleep interval, used in -forever mode")
+	userAgent := flag.String("user-agent", defaultUserAgent, "user-agent string")
 	flen.SetEnvPrefix("ICKA")
 	flen.Parse()
 
@@ -234,7 +237,7 @@ func main() {
 	}
 
 	if !*forever {
-		err := keepAlive(*email, *password)
+		err := keepAlive(*email, *password, *userAgent)
 		if err != nil {
 			die(err.Error())
 		}
@@ -247,7 +250,7 @@ func main() {
 	}
 
 	for {
-		err := keepAlive(*email, *password)
+		err := keepAlive(*email, *password, *userAgent)
 		if err != nil {
 			log.Printf("keep alive error: %v", err)
 		} else {
